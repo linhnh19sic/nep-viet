@@ -1,0 +1,254 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Khảo sát Nếp Việt</title>
+<meta name="description" content="Kể Nếp Việt nghe cách bạn chuẩn bị giỗ, Tết, Rằm, mùng Một... Khoảng 10 phút, không cần đăng nhập.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Be+Vietnam+Pro:wght@400;500;600&family=Lora:wght@500;600&display=swap" rel="stylesheet">
+<style>
+:root{--bg:#E8EEE7;--card:#F6F9F4;--ink:#1D2A24;--mut:#5B6B62;--jade:#2E5E4E;--on:#fff;--gold:#C99A2E;--red:#A32A2A;--line:#C5D1C7;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
+@media(prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#141C18;--card:#1D2822;--ink:#E6EEE8;--mut:#95A69B;--jade:#6FB39A;--on:#0F1A15;--line:#34453B;--red:#E58A8A}}
+:root[data-theme="dark"]{--bg:#141C18;--card:#1D2822;--ink:#E6EEE8;--mut:#95A69B;--jade:#6FB39A;--on:#0F1A15;--line:#34453B;--red:#E58A8A}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*,*::before,*::after{box-sizing:inherit}
+body{margin:0;background:var(--bg);color:var(--ink);font:400 16px/1.55 'Be Vietnam Pro',system-ui,sans-serif}
+.w{max-width:640px;margin:0 auto;padding:18px 18px 48px}
+.top{display:flex;justify-content:space-between;align-items:baseline;gap:12px;font-size:13px;color:var(--mut)}
+.logo{font:600 20px 'Lora',serif;color:var(--ink)}
+.bar{height:6px;background:var(--line);border-radius:3px;margin:12px 0 28px;position:relative}
+#bar{height:100%;width:0;background:var(--gold);border-radius:3px;transition:width .3s}
+h1{font:600 clamp(28px,7vw,38px)/1.2 'Lora',serif;margin:8px 0 14px}
+h2{font:600 clamp(20px,5vw,25px)/1.35 'Lora',serif;margin:0 0 10px}
+.d{color:var(--mut);margin:0 0 16px;white-space:pre-line}
+.pk{background:var(--card);border-left:3px solid var(--gold);padding:12px 14px;border-radius:0 8px 8px 0;margin:0 0 16px;font-size:15px}
+.o{display:block;background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 8px;cursor:pointer}
+.o input[name=c]{position:absolute;opacity:0;pointer-events:none}
+.o:has(input[name=c]:checked){border-color:var(--jade);box-shadow:inset 0 0 0 1px var(--jade)}
+.o:has(input[name=c]:focus-visible),.p:has(input:focus-visible){outline:3px solid var(--gold);outline-offset:2px}
+.ot{display:none;margin-top:8px}.o:has(input[name=c]:checked) .ot{display:block}
+input[type=text],input[type=email],input[type=number],textarea,select{width:100%;font:inherit;color:var(--ink);background:var(--card);border:1.5px solid var(--line);border-radius:8px;padding:10px 12px}
+input:focus,textarea:focus,select:focus{outline:3px solid var(--gold);outline-offset:1px}
+.lg{display:flex;justify-content:space-between;gap:12px;font-size:13px;color:var(--mut);margin:0 0 10px}
+.gr{background:var(--card);border:1.5px solid var(--line);border-radius:10px;padding:12px 14px;margin:0 0 8px}
+.gr p{margin:0 0 8px;font-size:15px}
+.ps{display:flex;gap:6px;flex-wrap:wrap}
+.p{flex:1 0 44px;text-align:center;cursor:pointer}
+.p input{position:absolute;opacity:0;pointer-events:none}
+.p span{display:block;padding:9px 6px;border:1.5px solid var(--line);border-radius:8px;font-size:15px}
+.p:has(input:checked) span{background:var(--jade);border-color:var(--jade);color:var(--on);font-weight:600}
+.p:has(input[value=NA]){flex:2 0 110px}.p input[value=NA]~span{font-size:13px}
+.nr{display:grid;gap:12px}.nr label{font-size:15px}.nr span{display:flex;align-items:center;gap:8px;margin-top:4px}.nr span b{font-weight:500;color:var(--mut)}
+.rk{display:grid;gap:10px}
+.err{color:var(--red);min-height:22px;margin:10px 0 0;font-size:14px}
+.nav{display:flex;gap:10px;margin-top:6px}
+button{font:600 16px 'Be Vietnam Pro',sans-serif;border-radius:10px;padding:12px 22px;cursor:pointer;border:1.5px solid var(--jade);background:var(--jade);color:var(--on)}
+button.g{background:transparent;color:var(--jade)}
+button:focus-visible{outline:3px solid var(--gold);outline-offset:2px}
+.nav button:last-child{margin-left:auto}
+.note{font-size:13px;color:var(--mut);margin-top:14px}
+@media(prefers-reduced-motion:reduce){#bar{transition:none}}
+</style>
+</head>
+<body>
+<div class="w">
+  <div class="top"><span class="logo">Nếp Việt</span><span id="sec"></span></div>
+  <div class="bar"><div id="bar"></div></div>
+  <main id="app" aria-live="polite"></main>
+</div>
+<script>
+// Điền địa chỉ nhận dữ liệu (ví dụ Google Apps Script Web App). Để trống = chế độ thử, cho tải file trả lời.
+const SUBMIT_URL = "";
+const SK = "nepviet-draft-v1";
+const SEC = ["Mở đầu","Sàng lọc","Nhu cầu","Cách tìm hiểu","Khó khăn","Ý tưởng Nếp Việt","Trả phí","Quyền riêng tư","Về bạn"];
+const A = ["Tết","Giỗ","Rằm/mùng Một","Ông Công ông Táo","Nhập trạch","Cưới hỏi","Đi lễ chùa","Khác"];
+const S6 = ["Hỏi ông bà/bố mẹ/họ hàng","Google","YouTube","Facebook/TikTok","Ứng dụng lịch vạn niên","AI (ChatGPT...)","Hỏi thầy cúng/sư/chức sắc","Dịch vụ lễ","Khác"];
+const S3 = ["Tự đứng ra lên kế hoạch và điều phối ít nhất một nghi lễ","Trực tiếp làm ít nhất một việc chuẩn bị (mua lễ, nấu cỗ, chuẩn bị/đọc văn khấn, liên hệ họ hàng)","Chưa làm, nhưng sẽ tự lo một nghi lễ cụ thể trong 3 tháng tới","Chỉ tham dự (đến ăn, ngồi xem, không góp phần chuẩn bị)","Không có kinh nghiệm và không có kế hoạch"];
+const R11 = ["Biết nên bắt đầu từ đâu / từ khi nào","Biết cần mua những gì, bao nhiêu","Xác định nguồn thông tin nào đáng tin","Tìm hướng dẫn phù hợp với vùng miền của mình","Tìm hướng dẫn phù hợp với truyền thống gia đình mình","Tìm hướng dẫn phù hợp với số người tham dự","Tìm hướng dẫn phù hợp với ngân sách của mình","Lập timeline chuẩn bị","Lập danh sách mua sắm","Lập dự toán chi phí","Phân công việc cho các thành viên","Sợ làm sai","Sợ bị chê là thiếu hiểu biết","Bị ảnh hưởng/lo lắng bởi nội dung “phạm/đại kỵ”","Phân biệt phong tục dân gian, tín ngưỡng và giáo lý tôn giáo","Nhớ/giữ lại “nếp nhà” riêng của gia đình"];
+const F15 = ["Kho kiến thức có nguồn dẫn và nhãn chuyên gia kiểm định","Hướng dẫn cá nhân hóa theo vùng miền, số người, ngân sách, chế độ ăn","Timeline và checklist chuẩn bị","Gợi ý mâm lễ + dự toán ngân sách","Văn khấn tham khảo có nguồn uy tín","Phân loại rõ phong tục / tín ngưỡng / tôn giáo / vùng miền","Trợ lý AI trả lời dựa trên kho dữ liệu đã kiểm định","Lịch âm + nhắc lịch","Chia sẻ kế hoạch và phân công cho cả gia đình","Sổ di sản/nếp nhà gia đình (lưu ngày giỗ, cách làm riêng, hình ảnh, ghi âm, câu chuyện)","Giới thiệu đơn vị cung cấp lễ vật, dịch vụ"];
+const R18 = ["Có ghi nguồn tham khảo","Có nhãn chuyên gia kiểm định","Nhiều người chia sẻ (dù không ghi nguồn)","Người thân trực tiếp hướng dẫn"];
+const EX = /^(Chưa từng|Không (dự đoán|có hạn chế|gặp|thoải mái|theo|muốn))/;
+const done = a => S3.indexOf(a.S3) > -1 && S3.indexOf(a.S3) < 3;
+const pay = a => (a.Q21 || "").startsWith("Mua");
+const stop = (t, m) => [t, m];
+const sat = ["Rất không hài lòng","Rất hài lòng"];
+const Q = [
+{id:"Q0",s:0,k:"s",t:"Bạn đồng ý tham gia và cho phép nhóm sử dụng câu trả lời ẩn danh?",d:"Khảo sát tìm hiểu cách các bạn trẻ chuẩn bị nghi lễ, phong tục gia đình (giỗ, Tết, Rằm/mùng Một, ông Công ông Táo, nhập trạch, cưới hỏi, đi lễ chùa) và mức độ quan tâm của bạn tới một nền tảng hỗ trợ việc này. Dành cho người từ 18 đến 35 tuổi, khoảng 10 phút. Câu trả lời ẩn danh, chỉ dùng cho báo cáo học tập của nhóm. Bạn có thể bỏ qua các câu không bắt buộc và dừng bất cứ lúc nào. Nếu để lại email ở cuối khảo sát, email được lưu riêng, không gắn với câu trả lời của bạn.",o:["Có","Không"],x:v=>v=="Không"&&stop("Cảm ơn bạn","Mình cần sự đồng ý của bạn để tiếp tục. Cảm ơn bạn đã ghé qua.")},
+{id:"S1",s:1,k:"s",t:"Độ tuổi của bạn?",o:["Dưới 18","18–24","25–30","31–35","Trên 35"],x:v=>(v=="Dưới 18"||v=="Trên 35")&&stop("Cảm ơn bạn","Khảo sát này dành cho người từ 18 đến 35 tuổi.")},
+{id:"S2",s:1,k:"s",t:"Công việc của bạn có liên quan trực tiếp đến lĩnh vực nào sau đây không?",o:["Nghiên cứu/giảng dạy văn hóa","Hoạt động tôn giáo hoặc tín ngưỡng","Cung cấp sản phẩm/dịch vụ cho các dịp văn hóa, nghi lễ","Phát triển nội dung hoặc ứng dụng liên quan","Không"],x:v=>v!="Không"&&stop("Cảm ơn bạn","Lần này nhóm đang tìm người không làm việc trực tiếp trong các lĩnh vực đó. Cảm ơn bạn đã quan tâm.")},
+{id:"S3",s:1,k:"s",t:"Trong 12 tháng qua, vai trò của bạn với các nghi lễ gia đình là gì? (chọn mức cao nhất)",o:S3},
+{id:"Q1",s:2,k:"m",t:"Bạn đã tự chuẩn bị/điều phối những nghi lễ nào trong 12 tháng qua?",o:[...A,"Chưa từng"]},
+{id:"Q2",s:2,k:"s",t:"Với nghi lễ gia đình, hiện nay ai là người chịu trách nhiệm chính?",o:["Ông bà/bố mẹ lo trọn, tôi chỉ phụ","Tôi và người lớn cùng lo, chia đôi","Tôi là người chủ yếu lo","Tôi tự lo hoàn toàn (không có người lớn hỗ trợ)"]},
+{id:"Q3",s:2,k:"m",t:"Trong 2–3 năm tới, bạn dự đoán mình sẽ phải tự đứng ra lo nghi lễ nào?",o:[...A,"Không dự đoán"]},
+{id:"Q4",s:2,k:"s",t:"Hiện tại bạn sống như thế nào so với nơi ở của bố mẹ/ông bà?",o:["Cùng nhà với gia đình","Cùng thành phố, khác nhà","Khác tỉnh","Ở nước ngoài"]},
+{id:"Q5",s:2,k:"g",t:"Mức độ đồng ý với từng nhận định sau",lo:"Hoàn toàn không đồng ý",hi:"Hoàn toàn đồng ý",r:["Tôi muốn giữ gìn phong tục gia đình.","Tôi thiếu kiến thức để tự thực hiện nghi lễ mà không cần người lớn hướng dẫn.","Khi phải tự lo nghi lễ, tôi cảm thấy áp lực.","Tôi lo mình làm sai nghi lễ.","Tôi lo mình làm thiếu nghi lễ.","Tôi lo mình làm chưa tôn trọng tổ tiên/truyền thống."]},
+{id:"Q6",s:3,k:"m",t:"Khi cần thông tin về một nghi lễ, bạn dùng những nguồn nào?",o:S6},
+{id:"Q7",s:3,k:"s",t:"Trong các nguồn trên, nguồn nào bạn dùng nhiều nhất?",o:S6},
+{id:"Q8a",s:3,k:"l",t:a=>"Với nguồn bạn chọn ở câu trước ("+(a.Q7||"")+"), bạn hài lòng ở mức nào?",lo:sat[0],hi:sat[1]},
+{id:"Q8b",s:3,k:"m",max:2,t:"Hạn chế lớn nhất của nguồn đó là gì? (chọn tối đa 2)",o:["Thông tin mâu thuẫn","Không rõ nguồn","Quá chung chung","Không phù hợp vùng miền/gia đình","Có nội dung gây sợ hãi","Khó tiếp cận/không có ai để hỏi","Không chuyển được thành việc cụ thể","Không có hạn chế"]},
+{id:"Q9",s:3,k:"s",sh:done,t:"Lần gần nhất bạn chuẩn bị một nghi lễ, bạn mất khoảng bao nhiêu thời gian để tìm hiểu/lên kế hoạch?",o:["Dưới 1 giờ","1–3 giờ","3–10 giờ","Trên 10 giờ","Không nhớ"]},
+{id:"Q9b",s:3,k:"s",sh:done,t:"Lần gần nhất đó, bạn (hoặc gia đình) chi khoảng bao nhiêu cho nghi lễ?",o:["Dưới 500.000đ","500.000đ – 1 triệu","Trên 1 – 2 triệu","Trên 2 – 5 triệu","Trên 5 triệu","Không nhớ"]},
+{id:"Q9c",s:3,k:"m",sh:done,t:"Bạn thường mua lễ vật ở đâu?",o:["Chợ/cửa hàng gần nhà","Siêu thị","Mua online (sàn thương mại điện tử, mạng xã hội)","Dịch vụ mâm cỗ/lễ trọn gói","Người nhà mua giúp","Khác"]},
+{id:"Q10a",s:3,k:"s",sh:done,t:"Bạn có từng gặp thông tin mâu thuẫn về cùng một nghi lễ không?",o:["Chưa","Thỉnh thoảng","Thường xuyên"]},
+{id:"Q10b",s:3,k:"s",sh:a=>done(a)&&a.Q10a&&a.Q10a!="Chưa",t:"Khi gặp thông tin mâu thuẫn, bạn thường xử lý bằng cách nào?",o:["Theo người lớn","Theo nguồn có nhiều người đồng thuận","Hỏi thêm chuyên gia","Bỏ qua","Khác"]},
+{id:"Q11",s:4,k:"g",na:1,sh:done,t:"Trong lần chuẩn bị gần nhất, mỗi việc dưới đây gây khó khăn hoặc lo lắng cho bạn ở mức nào?",lo:"Không khó/không lo",hi:"Rất khó/rất lo",r:R11},
+{id:"Q12",s:4,k:"r",sh:done,t:"Trong các việc vừa rồi, 3 việc khó nhất với bạn là gì?",lab:["Việc khó nhất","Việc khó thứ hai","Việc khó thứ ba"],r:R11},
+{id:"Q13",s:4,k:"m",sh:done,t:"Bạn có từng gặp các tình huống nào sau đây?",o:["Làm thiếu lễ vật","Làm sai trình tự","Mua thừa","Tốn hơn dự định","Cãi vã/bất đồng với người thân về cách làm","Bị nội dung “phạm/giải hạn” khiến lo lắng","Phải nhờ người khác làm hộ vì không biết","Không gặp vấn đề nào"]},
+{id:"Q14",s:4,k:"s",t:"Bạn hoặc gia đình có “nếp nhà” riêng (ngày giỗ, món cúng, cách làm, câu chuyện tổ tiên) chỉ truyền miệng không? Đã ghi chép lại chưa?",o:["Không có","Có, chưa ghi","Có, đã ghi lại một phần","Có, đã ghi đầy đủ"]},
+{id:"Q15a",s:5,k:"l",t:"Sau khi đọc giới thiệu trên, bạn hứng thú với một nền tảng như vậy ở mức nào?",pk:"Nếp Việt là ý tưởng về một nền tảng trực tuyến (dự kiến trước hết là website) giúp người trẻ tìm hiểu, tra cứu và chuẩn bị các nghi lễ, phong tục gia đình như giỗ, Tết, Rằm/mùng Một, nhập trạch, cưới hỏi. Người dùng chọn một nghi lễ, nhập vài thông tin như vùng miền, số người, ngân sách, rồi nhận hướng dẫn gồm ý nghĩa, thời điểm, danh sách lễ vật, mâm lễ gợi ý, văn khấn tham khảo có ghi nguồn và các bước thực hiện. Khi cách làm khác nhau giữa các vùng miền hoặc gia đình, nền tảng trình bày nhiều cách thay vì chỉ một cách duy nhất. Nền tảng không đưa ra dự đoán vận mệnh.",lo:"Hoàn toàn không hứng thú",hi:"Rất hứng thú"},
+{id:"Q15b",s:5,k:"s",t:"Lần tới khi phải chuẩn bị một nghi lễ, khả năng bạn sẽ thử dùng nền tảng này là:",o:["Chắc chắn không","Có thể không","Chưa chắc","Có thể có","Chắc chắn có"]},
+{id:"Q15c",s:5,k:"t",opt:1,t:"Điều gì khiến bạn hứng thú hoặc còn do dự nhất? (không bắt buộc)"},
+{id:"Q15",s:5,k:"g",t:"Bạn thấy mỗi tính năng dưới đây hữu ích ở mức nào?",lo:"Không cần",hi:"Rất cần",r:F15},
+{id:"Q16",s:5,k:"m",max:3,t:"Nếu chỉ được chọn 3 tính năng để dùng đầu tiên, bạn chọn gì? (tối đa 3)",o:F15},
+{id:"Q17",s:5,k:"s",t:"Nếu phải chọn một điều quan trọng nhất ở một nền tảng như vậy:",o:["Đáng tin cậy","Cá nhân hóa theo hoàn cảnh","Tiện (checklist/timeline có sẵn)","Miễn phí","Không phán xét/không gây sợ hãi","Lưu được nếp nhà"]},
+{id:"Q18a",s:5,k:"g",t:"Với một hướng dẫn nghi lễ, mỗi yếu tố dưới đây khiến bạn TIN hướng dẫn đó ở mức nào?",lo:"Không làm tăng niềm tin",hi:"Làm tăng niềm tin rất nhiều",r:R18},
+{id:"Q18b",s:5,k:"g",t:"Với một hướng dẫn nghi lễ, mỗi yếu tố dưới đây khiến bạn LÀM THEO hướng dẫn đó ở mức nào?",lo:"Không làm tăng khả năng làm theo",hi:"Làm tăng khả năng làm theo rất nhiều",r:R18},
+{id:"Q18c",s:5,k:"t",opt:1,t:"Lý do (không bắt buộc)"},
+{id:"Q19",s:5,k:"s",t:"Bạn muốn AI trả lời câu hỏi về phong tục theo cách nào?",o:["Đưa một cách làm phổ biến nhất","Đưa nhiều cách kèm bối cảnh vùng miền","Hỏi lại hoàn cảnh của tôi rồi mới trả lời","Chỉ trả lời khi có nguồn kiểm định"]},
+{id:"Q20",s:6,k:"s",t:"Bạn từng trả tiền cho ứng dụng/dịch vụ hỗ trợ lễ, lịch hay văn khấn chưa?",o:["Chưa","Có, một lần","Có, định kỳ"]},
+{id:"Q21",s:6,k:"s",t:"Nếu có nền tảng lên kế hoạch nghi lễ cá nhân hóa như mô tả ở trên, bạn sẽ chọn:",pk:"Các gói dự kiến\n• Bản miễn phí: kho kiến thức cơ bản, lịch âm, hướng dẫn nghi lễ phổ biến, số lượt hỏi AI có giới hạn.\n• Gói theo sự kiện: lập kế hoạch cho một nghi lễ cụ thể (giỗ, Tết, nhập trạch, cưới hỏi...) gồm timeline, checklist, danh sách mua sắm, dự toán ngân sách, phân công cho các thành viên, điều chỉnh theo số người, vùng miền và chế độ ăn.\n• Gói gia đình theo năm: dùng cho mọi nghi lễ trong năm, kèm nhắc lịch, chia sẻ kế hoạch cho cả nhà và lưu “nếp nhà” của gia đình.",o:["Chỉ dùng bản miễn phí","Mua gói theo sự kiện (ví dụ giỗ, Tết, nhập trạch, cưới hỏi)","Mua gói gia đình theo năm","Không dùng"]},
+{id:"Q21b",s:6,k:"m",max:2,sh:a=>a.Q21&&!pay(a),t:"Điều gì khiến bạn chưa muốn trả phí? (chọn tối đa 2)",o:["Thông tin miễn phí hiện có đã đủ dùng","Tôi ít khi phải chuẩn bị nghi lễ","Đã có người lớn lo","Chưa tin nội dung/AI của nền tảng","Giá","Không muốn chia sẻ thông tin gia đình","Khác"]},
+{id:"Q22",s:6,k:"n",sh:pay,t:"Với gói theo sự kiện, hãy cho biết mức giá cho MỖI SỰ KIỆN (nghìn đồng, nhập số, ví dụ 200 nghĩa là 200.000đ)",f:[["a","Mức giá bạn thấy rẻ, đáng mua"],["b","Mức giá bạn thấy hơi đắt nhưng vẫn cân nhắc"],["c","Mức giá quá đắt, bạn sẽ không mua"],["d","Mức giá rẻ đến mức bạn nghi ngờ chất lượng"]]},
+{id:"Q23",s:6,k:"s",sh:pay,t:"Với gói theo năm, bạn thấy mức giá nào phù hợp?",o:["Dưới 100K","100–300K","300–500K","Trên 500K","Không mua"]},
+{id:"Q24",s:6,k:"s",t:"Bạn thấy thế nào khi thấy nội dung giới thiệu từ đối tác (hoa, lễ vật, mâm cỗ) ở bản miễn phí?",o:["Rất ổn","Chấp nhận nếu liên quan","Khó chịu","Sẽ rời đi"]},
+{id:"Q25",s:6,k:"s",t:"Bạn có sẵn sàng để lại email/đăng ký danh sách chờ để dùng thử sớm không?",o:["Có","Không"]},
+{id:"Q25b",s:6,k:"e",sh:a=>a.Q25=="Có",t:"Email của bạn",d:"Email được lưu riêng, không gắn với câu trả lời của bạn."},
+{id:"Q26",s:7,k:"s",t:"Ngoài dịp sắp tới, bạn nghĩ mình sẽ dùng lại nền tảng này bao lâu một lần?",o:["Hàng tuần","Hàng tháng","Vài lần/năm","Chỉ 1 lần","Không dùng lại"]},
+{id:"Q27",s:7,k:"m",t:"Bạn thấy thoải mái chia sẻ những thông tin nào để nhận hướng dẫn cá nhân hóa?",o:["Vùng miền","Số người tham dự","Ngân sách","Chế độ ăn","Truyền thống/tôn giáo của gia đình","Hình ảnh/ghi âm/câu chuyện gia đình","Không thoải mái chia sẻ gì"]},
+{id:"Q28",s:7,k:"l",t:"Bạn lo ngại ở mức nào khi nền tảng lưu thông tin về tôn giáo và gia đình của bạn?",lo:"Hoàn toàn không lo ngại",hi:"Rất lo ngại"},
+{id:"D1",s:8,k:"s",opt:1,t:"Giới tính (không bắt buộc)",o:["Nam","Nữ","Khác","Không muốn nói"]},
+{id:"D2",s:8,k:"s",t:"Nơi sống hiện tại",o:["Hà Nội","TP.HCM","Tỉnh thành khác","Nước ngoài"]},
+{id:"D3",s:8,k:"s",t:"Gốc gia đình",o:["Bắc","Trung","Nam","Pha trộn (bố mẹ khác vùng)","Khác"]},
+{id:"D4",s:8,k:"s",t:"Công việc hiện tại",o:["Sinh viên","Đi làm","Khác"]},
+{id:"D5",s:8,k:"s",t:"Thu nhập hoặc trợ cấp hàng tháng (khoảng)",o:["Dưới 3 triệu","3 – dưới 7 triệu","7 – dưới 15 triệu","15 – dưới 30 triệu","Từ 30 triệu trở lên","Không muốn trả lời"]},
+{id:"D6",s:8,k:"m",opt:1,t:"Bạn theo tôn giáo hoặc truyền thống nào? (không bắt buộc, chọn nhiều được)",o:["Thờ cúng tổ tiên","Phật giáo","Công giáo","Khác","Không theo tôn giáo/truyền thống nào","Không muốn trả lời"]},
+{id:"Q29",s:8,k:"t",opt:1,t:"Nếu có một trợ lý giúp bạn chuẩn bị nghi lễ, bạn mong nó giải quyết điều gì đầu tiên? (không bắt buộc)"}
+];
+const $ = s => document.querySelector(s);
+const app = $("#app");
+let a = {}, i = -1, hist = [];
+try { const d = JSON.parse(localStorage.getItem(SK)); if (d) { a = d.a || {}; i = d.i ?? -1; hist = d.h || []; } } catch (e) {}
+const save = () => { try { localStorage.setItem(SK, JSON.stringify({a, i, h: hist})); } catch (e) {} };
+const clear = () => { try { localStorage.removeItem(SK); } catch (e) {} };
+const T = q => typeof q.t == "function" ? q.t(a) : q.t;
+const err = m => { const e = $(".err"); if (e) e.textContent = m || ""; };
+
+function start() {
+  $("#bar").style.width = "0"; $("#sec").textContent = "";
+  app.innerHTML = `<h1>Chuyện nghi lễ nhà bạn, kể Nếp Việt nghe với 🌾</h1><p class="d">Khảo sát dành cho bạn từ 18 đến 35 tuổi. Khoảng 10 phút, không cần đăng nhập, không hỏi tên thật.</p><div class="nav"><button id="go" style="margin-left:0">${i >= 0 ? "Tiếp tục" : "Bắt đầu"}</button></div><p class="note">Tự động lưu nháp trên máy bạn</p>`;
+}
+function render() {
+  const q = Q[i], v = a[q.id];
+  $("#bar").style.width = Math.round(i / Q.length * 100) + "%";
+  $("#sec").textContent = SEC[q.s];
+  let h = "";
+  if (q.k == "s" || q.k == "m") {
+    const m = q.k == "m", sel = m ? (v || []) : [v];
+    h = q.o.map((o, j) => `<label class="o"><input type="${m ? "checkbox" : "radio"}" name="c" value="${j}" ${sel.includes(o) ? "checked" : ""}><span>${o}</span>${o == "Khác" ? '<input type="text" class="ot" data-o placeholder="Ghi rõ...">' : ""}</label>`).join("");
+  } else if (q.k == "g" || q.k == "l") {
+    const rows = q.k == "l" ? [null] : q.r, vals = q.na ? [1,2,3,4,5,"NA"] : [1,2,3,4,5];
+    const get = r => q.k == "l" ? v : (v || {})[r];
+    h = `<div class="lg"><span>1 = ${q.lo}</span><span>5 = ${q.hi}</span></div>` + rows.map((r, ri) => `<div class="gr">${r ? `<p>${r}</p>` : ""}<div class="ps">${vals.map(x => `<label class="p"><input type="radio" name="g${ri}" value="${x}" data-r="${ri}" ${get(ri) == x ? "checked" : ""}><span>${x == "NA" ? "Không áp dụng" : x}</span></label>`).join("")}</div></div>`).join("");
+  } else if (q.k == "t") h = `<textarea rows="4" data-t></textarea>`;
+  else if (q.k == "e") h = `<input type="email" data-t autocomplete="email" placeholder="ten@email.com">`;
+  else if (q.k == "n") h = `<div class="nr">${q.f.map(([k, l]) => `<label>${l}<span><input type="number" min="0" inputmode="numeric" data-n="${k}"><b>nghìn đồng</b></span></label>`).join("")}</div>`;
+  else if (q.k == "r") h = `<div class="rk">${q.lab.map((l, n) => `<label>${l}<select data-s="${n}"><option value="">Chọn một việc</option>${q.r.map((r, j) => `<option value="${j}" ${v && v[n] == j ? "selected" : ""}>${r}</option>`).join("")}</select></label>`).join("")}</div>`;
+  app.innerHTML = `${q.pk ? `<div class="pk">${q.pk.replace(/\n/g, "<br>")}</div>` : ""}<h2>${T(q)}</h2>${q.d ? `<p class="d">${q.d}</p>` : ""}${h}<p class="err" role="alert"></p><div class="nav">${hist.length ? '<button class="g" id="back">Quay lại</button>' : ""}<button id="next">${q.k == "t" && !v ? "Tiếp" : "Tiếp"}</button></div>`;
+  if (q.k == "n") app.querySelectorAll("[data-n]").forEach(e => e.value = (v || {})[e.dataset.n] ?? "");
+  if (q.k == "t" || q.k == "e") app.querySelector("[data-t]").value = v || "";
+  const ot = app.querySelector("[data-o]"); if (ot) ot.value = a[q.id + "_o"] || "";
+  window.scrollTo(0, 0);
+}
+function check(q) {
+  const v = a[q.id];
+  if (q.k == "s") return !v && !q.opt ? "Bạn chọn một đáp án nhé." : "";
+  if (q.k == "m") return (!v || !v.length) && !q.opt ? "Bạn chọn ít nhất một đáp án nhé." : "";
+  if (q.k == "l") return v == null ? "Bạn chọn một mức nhé." : "";
+  if (q.k == "g") return q.r.some((_, r) => !v || v[r] == null) ? "Còn dòng chưa chọn, bạn kiểm tra lại nhé." : "";
+  if (q.k == "t") return q.opt || (v || "").trim() ? "" : "Bạn nhập câu trả lời nhé.";
+  if (q.k == "e") return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test((v || "").trim()) ? "" : "Email chưa đúng định dạng.";
+  if (q.k == "r") return !v || v.length < 3 || v.some(x => x === "" || x == null) ? "Bạn chọn đủ 3 việc nhé." : new Set(v).size < 3 ? "Ba việc cần khác nhau." : "";
+  if (q.k == "n") {
+    const n = ["a","b","c","d"].map(k => parseFloat((v || {})[k]));
+    if (n.some(x => isNaN(x) || x < 0)) return "Bạn nhập đủ 4 mức giá (số từ 0 trở lên) nhé.";
+    if (!(n[3] < n[0] && n[0] < n[1] && n[1] < n[2])) return "Hãy nhập theo thứ tự: nghi ngờ chất lượng < rẻ < hơi đắt < quá đắt.";
+  }
+  return "";
+}
+function nxt() { let j = i + 1; while (j < Q.length && Q[j].sh && !Q[j].sh(a)) j++; return j; }
+function end(t, m) { clear(); $("#bar").style.width = "100%"; app.innerHTML = `<h1>${t}</h1><p class="d">${m}</p>`; }
+async function dl(data) {
+  try { const d = window.claude && await claude.use("downloads"); if (d) { await d.save({filename: "tra-loi-nep-viet.json", data}); return; } } catch (e) {}
+  const u = URL.createObjectURL(new Blob([data], {type: "application/json"}));
+  const l = document.createElement("a"); l.href = u; l.download = "tra-loi-nep-viet.json"; l.click();
+}
+function flat() {
+  const o = {time: new Date().toISOString().slice(0, 10)}, cols = ["time"];
+  const put = (k, v) => { o[k] = Array.isArray(v) ? v.join("; ") : v; cols.push(k); };
+  Q.forEach(q => {
+    if (q.id == "Q25b") return;
+    const on = !q.sh || q.sh(a), v = on ? a[q.id] : undefined;
+    if (q.k == "g") q.r.forEach((_, r) => put(q.id + "_" + (q.na ? String.fromCharCode(97 + r) : r + 1), v ? v[r] : ""));
+    else if (q.k == "n") ["a","b","c","d"].forEach(k => put(q.id + k, v ? v[k] : ""));
+    else if (q.k == "r") [0,1,2].forEach(n => put(q.id + "abc"[n], v && v[n] ? String.fromCharCode(97 + +v[n]) + ". " + q.r[v[n]] : ""));
+    else put(q.id, v == null ? "" : v);
+    if (q.o && q.o.includes("Khác")) put(q.id + "_khac", on ? (a[q.id + "_o"] || "") : "");
+  });
+  return {...o, cols};
+}
+function finish() {
+  const email = (a.Q25 == "Có" && a.Q25b || "").trim();
+  const main = JSON.stringify(flat());
+  if (SUBMIT_URL) {
+    const post = b => fetch(SUBMIT_URL, {method: "POST", mode: "no-cors", headers: {"Content-Type": "text/plain"}, body: b}).catch(() => {});
+    post(main); if (email) post(JSON.stringify({mail: email}));
+    end("Cảm ơn bạn rất nhiều 🌾", "Câu trả lời của bạn đã được ghi nhận. Nếp Việt sẽ liên hệ qua email nếu bạn đã đăng ký dùng thử sớm.");
+  } else {
+    end("Cảm ơn bạn rất nhiều 🌾", "Chế độ thử: trang chưa được nối với nơi nhận dữ liệu, nên câu trả lời chưa được gửi đi.");
+    app.insertAdjacentHTML("beforeend", '<div class="nav"><button id="dl" style="margin-left:0">Tải bản trả lời (.json)</button></div>');
+    $("#dl").onclick = () => dl(main);
+  }
+}
+app.addEventListener("click", e => {
+  const id = e.target.id;
+  if (id == "go") { if (i < 0) i = 0; save(); render(); }
+  else if (id == "back") { i = hist.pop(); save(); render(); }
+  else if (id == "next") {
+    const q = Q[i], m = check(q); if (m) return err(m);
+    const r = q.x && q.x(a[q.id]); if (r) return end(r[0], r[1]);
+    hist.push(i); i = nxt();
+    if (i >= Q.length) return finish();
+    save(); render();
+  }
+});
+app.addEventListener("change", e => {
+  const t = e.target, q = Q[i]; if (!q) return;
+  err("");
+  if (t.name == "c") {
+    if (q.k == "s") a[q.id] = q.o[t.value];
+    else {
+      const m = [...app.querySelectorAll("input[name=c]")], o = q.o[t.value];
+      if (t.checked) {
+        m.forEach(x => { if (x !== t && (EX.test(o) || EX.test(q.o[x.value]))) x.checked = false; });
+        if (q.max && m.filter(x => x.checked).length > q.max) { t.checked = false; err("Chọn tối đa " + q.max + " lựa chọn."); }
+      }
+      a[q.id] = m.filter(x => x.checked).map(x => q.o[x.value]);
+    }
+  } else if (t.dataset.r !== undefined) {
+    const val = t.value == "NA" ? "NA" : +t.value;
+    if (q.k == "l") a[q.id] = val; else (a[q.id] = a[q.id] || {})[t.dataset.r] = val;
+  } else if (t.dataset.s !== undefined) { (a[q.id] = a[q.id] || [])[t.dataset.s] = t.value; }
+  save();
+});
+app.addEventListener("input", e => {
+  const t = e.target, q = Q[i]; if (!q) return;
+  if (t.dataset.o !== undefined) a[q.id + "_o"] = t.value;
+  else if (t.dataset.n) (a[q.id] = a[q.id] || {})[t.dataset.n] = t.value;
+  else if (t.dataset.t !== undefined) a[q.id] = t.value;
+  save();
+});
+start();
+</script>
+</body>
+</html>
